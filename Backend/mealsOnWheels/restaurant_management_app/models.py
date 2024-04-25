@@ -83,8 +83,7 @@ class Order(models.Model):
     total = models.DecimalField(max_digits=10, decimal_places=2)
     feedback = models.TextField(blank=True)
     delivery_requests = models.ManyToManyField('user_management_app.Courier')
-    restaurant = models.ForeignKey('Restaurant', on_delete=models.CASCADE)
-    courier = models.ForeignKey('user_management_app.Courier', on_delete=models.SET_NULL, null=True)
+
     STATUS_CHOICES = [
         ('placed', 'Placed'),
         ('rejected', 'Rejected'),
