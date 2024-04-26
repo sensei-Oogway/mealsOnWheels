@@ -154,6 +154,32 @@ def edit_or_delete_menu_item(request):
 
     else:
         return JsonResponse({'error': 'Invalid action specified'}, status=400)
+    
+def fetch_orders_by_restaurant_id(request):
+    restaurant_id = request.GET.get('restaurant_id')
+
+    try:
+        restaurant = Restaurant.objects.get(id=restaurant_id)
+    except Restaurant.DoesNotExist:
+        return JsonResponse({'error': 'Restaurant with the provided ID does not exist'}, status=404)
+
+    # Fetch orders associated with the restaurant
+    orders = restaurant.orders
+
+    # Serialize the orders queryset to JSON format
+    orders_data = []
+    for order in orders:
+        order_info = {
+            'id': order.id,
+            'total': order.total,
+            'status': order.status,
+            'feedback': order.feedback,
+            # Add other fields as needed
+        }
+        orders_data.append(order_info)
+
+    return JsonResponse(orders_data, safe=False)
+
 
 
 
