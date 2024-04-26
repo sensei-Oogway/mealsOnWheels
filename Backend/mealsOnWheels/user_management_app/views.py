@@ -130,6 +130,4 @@ def edit_customer_profile(request):
 
     except Customer.DoesNotExist:
         return JsonResponse({'error': 'Customer with the provided email does not exist'}, status=404)
-
-    else:
-        return JsonResponse({'error': 'Method not allowed'}, status=405)
+    
