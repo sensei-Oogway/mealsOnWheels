@@ -113,6 +113,7 @@ def create_menu_item(request):
 
         menu_item = MenuItem.objects.create(name=name, description=description, price=price)
         restaurant.menu.add(menu_item)
+        restaurant.save()
 
         return JsonResponse({'message': 'Menu item created and added to the restaurant successfully', 'menu_item_id': menu_item.id}, status=201)
 
@@ -227,6 +228,59 @@ def remove_courier_request(request):
     else:
         return JsonResponse({'error': 'Method not allowed'}, status=405)
 
+def status_update(request):
+    if request.method == 'POST':
+        status = request.POST.get('status')
+        order_id = request.POST.get('order_id')
 
+        try:
+            order = Order.objects.get(id=order_id)
+        except Order.DoesNotExist:
+            return JsonResponse({'error': 'Order with the provided ID does not exist'}, status=404)
 
+        if status == "accepted":
+            # Restaurant accepts the order
+            # Publish the order and move to waiting for courier
+            try:
+                restaurant_id = request.POST.get('restaurant_id')
+                restaurant = Restaurant.objects.get(id=restaurant_id)
+            except Restaurant.DoesNotExist:
+                return JsonResponse({'error': 'Restaurant with the provided ID does not exist'}, status=404)
 
+            # Add the order to all couriers' delivery requests
+            couriers = Courier.objects.all()
+            for courier in couriers:
+                order.delivery_requests.add(courier)
+                courier.orders.add(order)
+                courier.save()
+
+            order.status = "waiting_for_courier"
+            order.save()
+
+            return JsonResponse({'message': 'Restaurant accepted successfully'}, status=200)
+
+        elif status == "courier_accepted":
+            courier_email = request.POST.get('courier_email')
+            try:
+                courier = Courier.objects.get(email=courier_email)
+            except Courier.DoesNotExist:
+                return JsonResponse({'error': 'Courier with the provided email does not exist'}, status=404)
+
+            # Remove all other delivery requests and add the specific courier
+            order.delivery_requests.clear()
+            order.delivery_requests.add(courier)
+            order.status = status
+            order.save()
+
+            return JsonResponse({'message': 'Courier accepted successfully'}, status=200)
+
+        elif status in ["ready_to_dispatch", "rejected", "delivered", "picked_up"]:
+            order.status = status
+            order.save()
+            return JsonResponse({'message': 'Status updated successfully'}, status=200)
+
+        else:
+            return JsonResponse({'error': 'Invalid status'}, status=400)
+
+    else:
+        return JsonResponse({'error': 'Method not allowed'}, status=405)
