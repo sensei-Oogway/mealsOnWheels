@@ -1,6 +1,6 @@
 from django.http import JsonResponse
 from .models import Restaurant, MenuItem, Order
-from user_management_app.models import Customer
+from user_management_app.models import Customer, Courier
 
 def fetch_all_restaurants(request):
     restaurants = Restaurant.objects.all()
@@ -180,6 +180,32 @@ def fetch_orders_by_restaurant_id(request):
 
     return JsonResponse(orders_data, safe=False)
 
+def fetch_orders_by_courier_email(request):
+    email = request.GET.get('email')
+
+    if not email:
+        return JsonResponse({'error': 'Email parameter is missing'}, status=400)
+
+    try:
+        courier = Courier.objects.get(email=email)
+        orders = courier.orders.all()
+
+        # Serialize the orders queryset to JSON format
+        orders_data = []
+        for order in orders:
+            order_info = {
+                'id': order.id,
+                'total': order.total,
+                'status': order.status,
+                'feedback': order.feedback,
+                'menu': list(order.menu.values()),  # Serialize menu items for each order
+            }
+            orders_data.append(order_info)
+
+        return JsonResponse(orders_data, safe=False)
+    
+    except Courier.DoesNotExist:
+        return JsonResponse({'error': 'Courier with the provided email does not exist'}, status=404)
 
 
 
