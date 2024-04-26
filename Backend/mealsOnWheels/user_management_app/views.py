@@ -3,6 +3,8 @@ from django.views.decorators.http import require_POST
 from .models import User, Customer, Owner, Courier
 from restaurant_management_app.models import Restaurant
 
+from django.contrib.auth.hashers import check_password
+
 import random
 
 @require_POST
@@ -52,3 +54,21 @@ def register_user(request):
         return JsonResponse({'message': 'User registered successfully'}, status=200)
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=400)
+
+@require_POST
+def login(request):
+    email = request.POST.get('email')
+    password = request.POST.get('password')
+
+    if not (email and password):
+        return JsonResponse({'error': 'Incomplete login data'}, status=400)
+
+    try:
+        user = User.objects.get(email=email)
+        
+        if check_password(password, user.password):
+            return JsonResponse({'message': 'Login successful'}, status=200)
+        else:
+            return JsonResponse({'error': 'Incorrect password'}, status=400)
+    except User.DoesNotExist:
+        return JsonResponse({'error': 'User does not exist'}, status=400)
