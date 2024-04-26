@@ -72,3 +72,27 @@ def login(request):
             return JsonResponse({'error': 'Incorrect password'}, status=400)
     except User.DoesNotExist:
         return JsonResponse({'error': 'User does not exist'}, status=400)
+    
+def fetch_customer_profile_by_email(request):
+    email = request.GET.get('email')
+
+    if not email:
+        return JsonResponse({'error': 'Email parameter is missing'}, status=400)
+
+    try:
+        customer = Customer.objects.get(email=email)
+        
+        # Serialize the customer object to JSON format
+        customer_data = {
+            'id': customer.id,
+            'email': customer.email,
+            'name': customer.name,
+            'phone': customer.phone,
+            'address': customer.address,
+            'location': customer.location,
+            'subscription': customer.subscription,
+        }
+        
+        return JsonResponse(customer_data, status=200)
+    except Customer.DoesNotExist:
+        return JsonResponse({'error': 'Customer with the provided email does not exist'}, status=404)
