@@ -99,4 +99,24 @@ def provide_feedback_to_order(request):
 
     return JsonResponse({'message': 'Feedback added to order successfully'}, status=200)
 
+def create_menu_item(request):
+    if request.method == 'POST':
+        restaurant_id = request.POST.get('restaurant_id')
+        name = request.POST.get('name')
+        description = request.POST.get('description')
+        price = request.POST.get('price')
+
+        try:
+            restaurant = Restaurant.objects.get(id=restaurant_id)
+        except Restaurant.DoesNotExist:
+            return JsonResponse({'error': 'Restaurant with the provided ID does not exist'}, status=404)
+
+        menu_item = MenuItem.objects.create(name=name, description=description, price=price)
+        restaurant.menu.add(menu_item)
+
+        return JsonResponse({'message': 'Menu item created and added to the restaurant successfully', 'menu_item_id': menu_item.id}, status=201)
+
+    else:
+        return JsonResponse({'error': 'Method not allowed'}, status=405)
+
 
