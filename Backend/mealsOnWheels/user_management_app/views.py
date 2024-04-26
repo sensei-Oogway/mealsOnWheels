@@ -96,3 +96,40 @@ def fetch_customer_profile_by_email(request):
         return JsonResponse(customer_data, status=200)
     except Customer.DoesNotExist:
         return JsonResponse({'error': 'Customer with the provided email does not exist'}, status=404)
+
+@require_POST
+def edit_customer_profile(request):
+    email = request.POST.get('email')
+
+    if not email:
+        return JsonResponse({'error': 'Email parameter is missing'}, status=400)
+
+    try:
+        customer = Customer.objects.get(email=email)
+
+        name = request.POST.get('name')
+        phone = request.POST.get('phone')
+        address = request.POST.get('address')
+        location = request.POST.get('location')
+        subscription = request.POST.get('subscription')
+
+        if name:
+            customer.name = name
+        if phone:
+            customer.phone = phone
+        if address:
+            customer.address = address
+        if location:
+            customer.location = location
+        if subscription:
+            customer.subscription = subscription
+
+        customer.save()
+
+        return JsonResponse({'message': 'Customer profile updated successfully'}, status=200)
+
+    except Customer.DoesNotExist:
+        return JsonResponse({'error': 'Customer with the provided email does not exist'}, status=404)
+
+    else:
+        return JsonResponse({'error': 'Method not allowed'}, status=405)
