@@ -77,4 +77,26 @@ def fetch_orders_by_customer_email(request):
 
     except Customer.DoesNotExist:
         return JsonResponse({'error': 'Customer with the provided email does not exist'}, status=404)
+    
+def provide_feedback_to_order(request):
+    order_id = request.POST.get('order_id')
+    res_rating = request.POST.get('res_rating')
+    courier_rating = request.POST.get('courier_rating')
+
+    try:
+        order = Order.objects.get(id=order_id)
+    except Order.DoesNotExist:
+        return JsonResponse({'error': 'Order with the provided ID does not exist'}, status=404)
+
+    feedback = f"{res_rating}|{courier_rating}"
+
+    if order.feedback:
+        order.feedback += f",{feedback}"
+    else:
+        order.feedback = feedback
+
+    order.save()
+
+    return JsonResponse({'message': 'Feedback added to order successfully'}, status=200)
+
 
