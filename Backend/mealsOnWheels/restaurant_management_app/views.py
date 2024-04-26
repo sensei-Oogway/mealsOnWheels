@@ -118,5 +118,42 @@ def create_menu_item(request):
 
     else:
         return JsonResponse({'error': 'Method not allowed'}, status=405)
+    
+def edit_or_delete_menu_item(request):
+    action = request.POST.get('action')  # 'edit' or 'delete'
+    menu_item_id = request.POST.get('menu_item_id')
+    restaurant_id = request.POST.get('restaurant_id')
+
+    try:
+        menu_item = MenuItem.objects.get(id=menu_item_id)
+        restaurant = Restaurant.objects.get(id=restaurant_id)
+    except (MenuItem.DoesNotExist, Restaurant.DoesNotExist):
+        return JsonResponse({'error': 'Menu item or Restaurant with the provided ID does not exist'}, status=404)
+
+    if action == 'edit':
+        name = request.POST.get('name')
+        description = request.POST.get('description')
+        price = request.POST.get('price')
+        if name:
+            menu_item.name = name
+        if description:
+            menu_item.description = description
+        if price:
+            menu_item.price = price
+        menu_item.save()
+
+        return JsonResponse({'message': 'Menu item updated successfully'}, status=200)
+
+    elif action == 'delete':
+        if menu_item in restaurant.menu.all():
+            restaurant.menu.remove(menu_item)
+            menu_item.delete()
+            return JsonResponse({'message': 'Menu item deleted successfully from the restaurant'}, status=200)
+        else:
+            return JsonResponse({'error': 'Menu item is not in the menu of the provided restaurant'}, status=400)
+
+    else:
+        return JsonResponse({'error': 'Invalid action specified'}, status=400)
+
 
 
