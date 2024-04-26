@@ -206,6 +206,27 @@ def fetch_orders_by_courier_email(request):
     
     except Courier.DoesNotExist:
         return JsonResponse({'error': 'Courier with the provided email does not exist'}, status=404)
+    
+def remove_courier_request(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        order_id = request.POST.get('order_id')
+
+        try:
+            courier = Courier.objects.get(email=email)
+            order = Order.objects.get(id=order_id)
+        except Courier.DoesNotExist:
+            return JsonResponse({'error': 'Courier with the provided email does not exist'}, status=404)
+        except Order.DoesNotExist:
+            return JsonResponse({'error': 'Order with the provided ID does not exist'}, status=404)
+
+        order.delivery_requests.remove(courier)
+        courier.orders.remove(order)
+
+        return JsonResponse({'message': 'Courier request removed from order successfully'}, status=200)
+    else:
+        return JsonResponse({'error': 'Method not allowed'}, status=405)
+
 
 
 
