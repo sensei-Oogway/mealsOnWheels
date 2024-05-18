@@ -6,7 +6,7 @@ class Restaurant(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
     address = models.CharField(max_length=255)
-    image = models.ImageField(upload_to='restaurant_images/')
+    image = models.TextField()
     location = models.CharField(max_length=100)
     menu = models.ManyToManyField('MenuItem')
     orders = models.ManyToManyField('Order')
@@ -53,7 +53,7 @@ class Restaurant(models.Model):
 class MenuItem(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
-    image = models.ImageField(upload_to='menu_item_images/')
+    image = models.TextField()
     description = models.TextField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
 

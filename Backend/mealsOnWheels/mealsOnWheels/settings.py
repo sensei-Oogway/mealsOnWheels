@@ -79,7 +79,7 @@ WSGI_APPLICATION = "mealsOnWheels.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "mealsOnWheels",
+        "NAME": "mealsOnWheelsV2",
         "USER" : "postgres",
         "PASSWORD" : "admin",
         "HOST" : "localhost"
