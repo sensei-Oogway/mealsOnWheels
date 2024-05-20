@@ -1,0 +1,113 @@
+{%load static%}
+<section class="app-restaurant-body">
+  <div class="restaurant-cover-container">
+    <img src="{{restaurant.image}}" />
+    <div class="restaurant-cover-details">
+      <p class="card-text">{{restaurant.name}}</p>
+      <p class="card-text">{{restaurant.rating}}&starf;</p>
+    </div>
+  </div>
+
+  <div class="container mt-3 menu-container overflow-auto">
+    <div class="row">
+      {% for menu_item in restaurant.menu %}
+      <!-- Menu item starts -->
+      {% include 'menuItem_card.html' with fromRestaurant=True %}
+      <!-- Menu item ended -->
+      {% endfor %}
+
+      <!-- Menu item add -->
+      <div class="col-2 restaurant-menu-card add-menu-card">
+        <div
+          class="add-menu"
+          data-bs-toggle="modal"
+          data-bs-target="#menuItemModal"
+        >
+          <img src="{%static 'img/circle_plus.png'%}" />
+          <p>Add menu</p>
+        </div>
+      </div>
+      <!-- Menu item add -->
+    </div>
+  </div>
+
+  <!-- Menu item modal -->
+  <div
+    class="modal fade"
+    id="menuItemModal"
+    tabindex="-1"
+    aria-labelledby="menuItemModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="menuItemModalLabel">Add Menu Item</h5>
+          <button
+            type="button"
+            class="btn-close"
+            id="menuItemModalCloseBtn"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+            onclick="clearMenuModal()"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="mb-3">
+              <label for="productName" class="form-label">Name</label>
+              <input type="text" class="form-control" id="productName" />
+            </div>
+            <div class="mb-3">
+              <label for="productImage" class="form-label">Image</label>
+              <input
+                type="file"
+                class="form-control"
+                id="productImage"
+                name="productImage"
+              />
+            </div>
+            <div class="mb-3">
+              <label for="productDescription" class="form-label"
+                >Description</label
+              >
+              <textarea
+                class="form-control"
+                id="productDescription"
+                rows="3"
+              ></textarea>
+            </div>
+            <div class="mb-3">
+              <label for="productPrice" class="form-label">Price (A$)</label>
+              <input type="number" class="form-control" id="productPrice" />
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-success add-menu-item"
+            onclick="saveItem()"
+          >
+            Save Item
+          </button>
+          <button
+            type="button"
+            class="btn btn-success d-none edit-menu-item"
+            onclick="submitEditItem()"
+          >
+            Edit Item
+          </button>
+          <button
+            type="button"
+            class="btn btn-danger d-none delete-menu-item"
+            onclick="deleteItem()"
+          >
+            Delete Item
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Menu item modal -->
+</section>

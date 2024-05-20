@@ -1,0 +1,19 @@
+<!-- Category Bar -->
+<!--                categoryBar.html               -->
+{% include 'categoryBar.html' %}
+<!-- Category Bar -->
+
+<!-- Restaurants Grid -->
+<div class="container mt-4">
+  <div class="row">
+    <!-- Card starts -->
+    <!--     restaurant_card.html                    -->
+
+    {% for restaurant in restaurants %}
+    {% include 'restaurant_card.html' %}
+    {% endfor %}
+
+    <!-- Card ends -->
+  </div>
+</div>
+<!-- Restaurants Grid -->

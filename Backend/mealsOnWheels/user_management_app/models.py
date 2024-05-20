@@ -53,6 +53,9 @@ class Owner(models.Model):
 
     def verify_password(self, password):
         return self.password == password
+    
+    def getRestaurant(self):
+        return self.restaurant
 
     @classmethod
     def get(cls, email):

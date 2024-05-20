@@ -1,0 +1,29 @@
+<!-- Menu item starts -->
+<div class="col-2 restaurant-menu-card" data-val="{{menu_item.id}}">
+  <div class="restaurant-menu-card-head">
+    <img src="{{menu_item.image}}" />
+    {% if fromRestaurant %}
+    <button
+      class="restaurant-menu-edit-btn"
+      onclick="openEditModal('{{ menu_item.id }}', '{{ menu_item.name }}', '{{ menu_item.description }}', '{{ menu_item.price }}')"
+      ;
+    >
+      Edit
+    </button>
+
+    {% else %}
+    <button
+      class="restaurant-menu-add-btn"
+      onclick="addToCart('{{restaurant.id}}','{{menu_item.id}}','{{menu_item.name}}','{{menu_item.price}}','{{menu_item.image}}')"
+    >
+      Add
+    </button>
+    {%endif%}
+  </div>
+  <div class="menu-description mt-2">
+    <strong class="price">A${{menu_item.price}}</strong>
+    <p class="name">{{menu_item.name}}</p>
+    <p class="description custom-truncate">{{menu_item.description}}</p>
+  </div>
+</div>
+<!-- Menu item ended -->

@@ -1,0 +1,20 @@
+{%load static%}
+<div class="restaurant-cover-container" restaurant_id="{{restaurant.id}}">
+  <img src="{{restaurant.image}}" />
+  <div class="restaurant-cover-details">
+    <p class="card-text">{{restaurant.name}}</p>
+    <p class="card-text">{{restaurant.rating}}&starf;</p>
+  </div>
+</div>
+
+<div class="container mt-3 menu-container overflow-auto">
+  <div class="row">
+    <!-- Menu item starts -->
+    {% for menu_item in restaurant.menu %}
+    <!-- Menu item starts -->
+    {% include 'menuItem_card.html' with fromRestaurant=False %}
+    <!-- Menu item ended -->
+    {% endfor %}
+    <!-- Menu item ended -->
+  </div>
+</div>

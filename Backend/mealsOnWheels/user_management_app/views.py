@@ -2,6 +2,7 @@ from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from .models import Customer, Owner, Courier
 from restaurant_management_app.models import Restaurant
+from django.core import serializers
 
 from django.shortcuts import render
 
@@ -69,28 +70,36 @@ def register_user(request):
 
 @require_POST
 def login(request):
-    email = request.POST.get('email')
-    password = request.POST.get('password')
+    data = json.loads(request.body)
+    
+    email = data.get('email')
+    password = data.get('password')
 
     if not (email and password):
         return JsonResponse({'error': 'Incomplete login data'}, status=400)
     
     customer = Customer.get(email)
     if(customer):
-        customer.verify_password(password)
-        return JsonResponse({'message': 'Login successful', "status":200,"type":"customer"}, status=200)
+        if(customer.verify_password(password)):
+            return JsonResponse({'message': 'Login successful', "status":200,"type":"customer", "user":serializers.serialize('json', [customer])}, status=200)
+        else:
+            return JsonResponse({'message': 'Wrong password', "status":400})
+        
     
     owner = Owner.get(email)
     if(owner):
-        owner.verify_password(password)
-        return JsonResponse({'message': 'Login successful', "status":200,"type":"owner"}, status=200)
-    
+        if(owner.verify_password(password)):
+            return JsonResponse({'message': 'Login successful', "status":200,"type":"owner","user":serializers.serialize('json', [owner])}, status=200)
+        else:
+            return JsonResponse({'message': 'Wrong password', "status":400})
+        
     courier = Courier.get(email)
     if(courier):
-        courier.verify_password(password)
-        return JsonResponse({'message': 'Login successful', "status":200,"type":"courier"}, status=200)
-        
-    return JsonResponse({'error': 'Login failure'}, status=400)
+        if(courier.verify_password(password)):
+            return JsonResponse({'message': 'Login successful', "status":200,"type":"courier","user":serializers.serialize('json', [courier])}, status=200)
+        else:
+            return JsonResponse({'message': 'Wrong password', "status":400})
+    return JsonResponse({'message': 'Invalid User'}, status=400)
 
 
     

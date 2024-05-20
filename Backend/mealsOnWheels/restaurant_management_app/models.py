@@ -1,6 +1,6 @@
 from django.db import models
 from django.core import serializers
-import json
+import random
 
 class Restaurant(models.Model):
     id = models.AutoField(primary_key=True)
@@ -11,6 +11,8 @@ class Restaurant(models.Model):
     menu = models.ManyToManyField('MenuItem')
     orders = models.ManyToManyField('Order')
     rating = models.FloatField(default=3.5)
+    
+    distance = models.IntegerField(default=random.randint(1, 12))
     CATEGORY_CHOICES = [
         ('cafe', 'Cafe'),
         ('asian', 'Asian'),
@@ -46,7 +48,7 @@ class Restaurant(models.Model):
     def fetch_restaurant_by_id(cls, restaurant_id):
         try:
             restaurant = cls.objects.get(id=restaurant_id)
-            return serializers.serialize('json', [restaurant])
+            return restaurant
         except cls.DoesNotExist:
             return None
 
@@ -83,6 +85,8 @@ class Order(models.Model):
     total = models.DecimalField(max_digits=10, decimal_places=2)
     feedback = models.TextField(blank=True)
     delivery_requests = models.ManyToManyField('user_management_app.Courier')
+    
+    restaurant_instance  = models.ForeignKey('Restaurant', on_delete=models.CASCADE, default=None)
 
     STATUS_CHOICES = [
         ('placed', 'Placed'),
@@ -119,3 +123,13 @@ class Order(models.Model):
             return serializers.serialize('json', [order])
         except cls.DoesNotExist:
             return None
+        
+    def getStatusIndex(self):
+        status_index = None
+        
+        for index, (value, label) in enumerate(self.STATUS_CHOICES):
+            if value == self.status:
+                status_index = index
+                break
+            
+        return status_index

@@ -25,6 +25,106 @@ function openRegistrationForm() {
   $(".register-container").removeClass("d-none");
 }
 
+function submitLoginForm() {
+  var email = $("#username").val();
+  var password = $("#pwd").val();
+
+  if (email.length <= 0 || password.length <= 0) {
+    toastr.error(
+      "Login failed.\n<div>Please try again with proper values.</div>",
+      "Error",
+      {
+        closeButton: true,
+        timeOut: 2000,
+      }
+    );
+  } else {
+    console.log(email + " " + password);
+
+    var jsonData = JSON.stringify({ email: email, password: password });
+    fetch("/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: jsonData,
+    })
+      .then((response) => {
+        if (!response.ok) {
+          toastr.error("Login failed.<div>Try again.</div>", "Error", {
+            closeButton: true,
+            timeOut: 3000,
+          });
+          return;
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if (data?.status == 200) {
+          var user_type = data.type;
+          localStorage.setItem("userType", user_type);
+          localStorage.setItem("userId", JSON.parse(data.user)[0].pk);
+          localStorage.setItem(
+            "subscription",
+            JSON.parse(data.user)[0].fields?.subscription
+          );
+
+          if (user_type == "customer") {
+            var newPageUrl = "restaurant/customer_home";
+            window.location.href = newPageUrl;
+          } else if (user_type == "owner") {
+            $.ajax({
+              url: "restaurant/restaurant_home",
+              type: "POST",
+              data: {
+                id: localStorage.getItem("userId"),
+              },
+              success: function (response) {
+                document.open();
+                document.write(response);
+                document.close();
+              },
+              error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+              },
+            });
+          } else if(user_type == "courier"){
+            $.ajax({
+              url: "restaurant/courier_home",
+              type: "POST",
+              data: {
+                email: localStorage.getItem("userId"),
+              },
+              success: function (response) {
+                document.open();
+                document.write(response);
+                document.close();
+              },
+              error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+              },
+            });
+          }
+        } else {
+          toastr.error(
+            "Login failed.<div>Try again.</div>" + data.message,
+            "Error",
+            {
+              closeButton: true,
+              timeOut: 3000,
+            }
+          );
+        }
+      })
+      .catch((error) => {
+        toastr.error("Login failed, retry!", "Error", {
+          closeButton: true,
+          timeOut: 2000,
+        });
+      });
+  }
+}
+
 async function submitRegistrationForm(element) {
   var formData = {};
 
@@ -94,12 +194,12 @@ async function submitRegistrationForm(element) {
     .then((data) => {
       // Handle server response
       if (data?.status == 200) {
-        toastr.success("Registration successful! Login to proceed", "Success");
+        toastr.success("Registration successful! Proceeding to login page...", "Success");
         var overlay = document.createElement("div");
         overlay.classList.add("toast-overlay");
         document.body.appendChild(overlay);
 
-        setTimeout(() => location.reload(), 3000);
+        setTimeout(() => Window.location="/index", 3000);
       }
     })
     .catch((error) => {
@@ -155,4 +255,49 @@ function convertImageToBase64(file) {
 
     reader.readAsDataURL(file);
   });
+}
+
+function checkForPreviousUsage() {
+  var userData = localStorage.getItem("userId");
+  if (userData) {
+    var userType = localStorage.getItem("userType");
+
+    if (userType == "customer") {
+      var currentUrl = window.location.href;
+      var newPageUrl = "restaurant/customer_home";
+      window.location.href = newPageUrl;
+    } else if (userType == "owner") {
+      $.ajax({
+        url: "restaurant/restaurant_home",
+        type: "POST",
+        data: {
+          id: localStorage.getItem("userId"),
+        },
+        success: function (response) {
+          document.open();
+          document.write(response);
+          document.close();
+        },
+        error: function (xhr, status, error) {
+          console.error(xhr.responseText);
+        },
+      });
+    } else if(userType == "courier"){
+      $.ajax({
+        url: "restaurant/courier_home",
+        type: "POST",
+        data: {
+          email: localStorage.getItem("userId"),
+        },
+        success: function (response) {
+          document.open();
+          document.write(response);
+          document.close();
+        },
+        error: function (xhr, status, error) {
+          console.error(xhr.responseText);
+        },
+      });
+    }
+}
 }

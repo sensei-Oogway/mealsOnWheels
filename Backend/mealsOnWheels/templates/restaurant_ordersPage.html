@@ -1,0 +1,81 @@
+<div class="container">
+  <h2>Orders</h2>
+  <ul class="list-group mt-3">
+    <!-- order Item row -->
+    {% for order in orders %}
+    <li class="list-group-item" order_id="{{order.id}}">
+      <div class="row align-items-center">
+        <div class="col-1">
+        </div>
+        <div class="col-4">
+          <div class="order-name">order No. {{ forloop.counter }}</div>
+          <div class="order-amt fw-bold">({{order.total}} AUD)</div>
+        </div>
+        <div class="col-5 order-status">
+          Current Status: <strong>{{order.status}}</strong>
+        </div>
+        <button
+          type="button"
+          class="col-2 btn btn-success"
+          onclick="fetchRestaurantOrderDetails('{{order.id}}',$('#orderRestaurantModalTrigger'))"
+        >
+          View Order
+        </button>
+        <button
+          id="orderRestaurantModalTrigger"
+          type="button"
+          class="col-2 btn btn-success d-none"
+          data-bs-toggle="modal"
+          data-bs-target="#orderRestaurantModal"
+        >
+          View Order
+        </button>
+      </div>
+    </li>
+    {% endfor %}
+    <!-- order Item row -->
+  </ul>
+</div>
+
+<!-- Order Details Modal -->
+<div
+  class="modal fade"
+  id="orderRestaurantModal"
+  tabindex="-1"
+  aria-labelledby="orderModalLabel"
+  aria-hidden="true"
+>
+  <!-- Order Modal details -->
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="orderModalLabel">Order Details</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <h4 class="order_restaurant_name"></h4>
+        <ul class="order_menu"></ul>
+        <p>Price: <span class="order_price"></span> A$</p>
+        <p>Status: <span class="order_status"></span></p>
+        <div class="order_delivery_details d-none d-flex flex-column">
+          <p>Courier Name: <span class="order_delivery_name"></span></p>
+          <p>Contact: <span class="order_delivery_contact"></span></p>
+        </div>
+      </div>
+      <div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-success accept-order d-none" onclick="acceptRestaurantOrder()" data-bs-dismiss="modal">Accept</button>
+          <button type="button" class="btn btn-danger reject-order d-none" onclick="rejectRestaurantOrder()" data-bs-dismiss="modal">Reject</button>
+        </div>
+      </div>
+    </div>
+    <!-- Order Modal details -->
+  </div>
+
+  <!-- Order Details Modal -->
+</div>

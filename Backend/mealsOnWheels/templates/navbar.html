@@ -1,16 +1,23 @@
-<nav class="app-navbar fixed-top d-none">
+{%load static%}
+<nav class="app-navbar fixed-top">
   <div class="navbar-left">
     <button class="navbar-toggler pe-3" type="button" onclick="toggleSidebar()">
       <i class="fas fa-bars fa-lg" style="color: rgb(23, 136, 65)"></i>
     </button>
 
-    <img class="app-icon" src="assets/cutlery.png" />
+    <img class="app-icon" src="{%static 'img/cutlery.png'%}" />
     <h1 class="app-title">Meals on' Wheels</h1>
   </div>
 
+  {% if forCustomer %}
   <div class="navbar-right">
     <div class="search-container">
-      <input type="text" class="search-input" placeholder="Search..." />
+      <input
+        type="text"
+        class="search-input"
+        placeholder="Search..."
+        oninput="searchByName(this)"
+      />
       <span class="search-icon">
         <i class="fas fa-search" style="color: rgb(23, 136, 65)"></i>
       </span>
@@ -31,4 +38,5 @@
       >
     </button>
   </div>
+  {% endif %}
 </nav>

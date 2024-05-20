@@ -1,0 +1,21 @@
+<!-- Card starts -->
+<div class="col-3 column-gap">
+  <a
+    href="#"
+    class="card-link"
+    onclick="openRestaurantPage('{{restaurant.id}}')"
+  >
+    <div class="card restaurant-card">
+      <img src="{{restaurant.image}}" class="card-img-top" />
+      <div class="card-body">
+        <h5 class="card-title">{{restaurant.name}}</h5>
+        <div class="card-text d-flex justify-content-start gap-2">
+          <span class="rating">{{restaurant.rating}}&starf;</span>&#x2016;
+          <span class="distance">{{restaurant.distance}}Km</span>&#x2016;
+          <span class="cuisine">{{restaurant.category}}</span>
+        </div>
+      </div>
+    </div>
+  </a>
+</div>
+<!-- Card ends -->

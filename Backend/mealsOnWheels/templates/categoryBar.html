@@ -1,0 +1,193 @@
+{%load static%}
+<!-- Category Bar -->
+<section class="app-category-bar">
+  <div class="category-list">
+    <a
+      href="#"
+      class="card-link"
+      data-value="cafe"
+      onclick="searchByCategory(this)"
+    >
+      <div class="category-card">
+        <img src="{%static 'img/cafe.png'%}" class="category-icon" />
+        <div class="category-name">Cafe</div>
+      </div>
+    </a>
+
+    <a
+      href="#"
+      class="card-link"
+      data-value="bubble_tea"
+      onclick="searchByCategory(this)"
+    >
+      <div class="category-card">
+        <img src="{%static 'img/boba.png'%}" class="category-icon" />
+        <div class="category-name">Bubble Tea</div>
+      </div>
+    </a>
+
+    <a
+      href="#"
+      class="card-link"
+      data-value="breakfast"
+      onclick="searchByCategory(this)"
+    >
+      <div class="category-card">
+        <img src="{%static 'img/breakfast.png'%}" class="category-icon" />
+        <div class="category-name">Breakfast</div>
+      </div>
+    </a>
+
+    <a
+      href="#"
+      class="card-link"
+      data-value="vegan"
+      onclick="searchByCategory(this)"
+    >
+      <div class="category-card">
+        <img src="{%static 'img/vegan.png'%}" class="category-icon" />
+        <div class="category-name">Vegan</div>
+      </div>
+    </a>
+
+    <a href="#" class="card-link">
+      <div
+        class="category-card"
+        data-value="pizza"
+        onclick="searchByCategory(this)"
+      >
+        <img src="{%static 'img/pizza.png'%}" class="category-icon" />
+        <div class="category-name">Pizza</div>
+      </div>
+    </a>
+
+    <a
+      href="#"
+      class="card-link"
+      data-value="asian"
+      onclick="searchByCategory(this)"
+    >
+      <div class="category-card">
+        <img src="{%static 'img/asian.png'%}" class="category-icon" />
+        <div class="category-name">Asian</div>
+      </div>
+    </a>
+
+    <a
+      href="#"
+      class="card-link"
+      data-value="club"
+      onclick="searchByCategory(this)"
+    >
+      <div class="category-card">
+        <img src="{%static 'img/club.png'%}" class="category-icon" />
+        <div class="category-name">Club</div>
+      </div>
+    </a>
+
+    <a
+      href="#"
+      class="card-link"
+      data-value="fast_food"
+      onclick="searchByCategory(this)"
+    >
+      <div class="category-card">
+        <img src="{%static 'img/fast-food.png'%}" class="category-icon" />
+        <div class="category-name">Fast Food</div>
+      </div>
+    </a>
+
+    <a
+      href="#"
+      class="card-link"
+      data-value="indian"
+      onclick="searchByCategory(this)"
+    >
+      <div class="category-card">
+        <img src="{%static 'img/indian.png'%}" class="category-icon" />
+        <div class="category-name">Indian</div>
+      </div>
+    </a>
+  </div>
+  <div class="filter-list">
+    <div class="dropdown">
+      <button
+        class="btn dropdown-toggle category-dropdown-btn"
+        type="button"
+        id="review_dropdown"
+        data-bs-toggle="dropdown"
+      >
+        Rating
+      </button>
+      <ul
+        class="dropdown-menu category-review-dropdown"
+        aria-labelledby="review_dropdown"
+      >
+        <li>
+          <a class="dropdown-item" href="#" onclick="searchByRating(1)"
+            >1 &starf;</a
+          >
+        </li>
+        <li>
+          <a class="dropdown-item" href="#" onclick="searchByRating(2)"
+            >2 &starf;
+          </a>
+        </li>
+        <li>
+          <a class="dropdown-item" href="#" onclick="searchByRating(3)"
+            >3 &starf;</a
+          >
+        </li>
+        <li>
+          <a class="dropdown-item" href="#" onclick="searchByRating(4)"
+            >4 &starf;</a
+          >
+        </li>
+        <li>
+          <a class="dropdown-item" href="#" onclick="searchByRating(5)"
+            >5 &starf;</a
+          >
+        </li>
+        <li>
+          <a class="dropdown-item" href="#" onclick="searchByRating(-1)"
+            >clear</a
+          >
+        </li>
+      </ul>
+    </div>
+
+    <div class="dropdown">
+      <button
+        class="btn dropdown-toggle category-dropdown-btn"
+        type="button"
+        id="distance_dropdown"
+        data-bs-toggle="dropdown"
+      >
+        Distance
+      </button>
+      <ul class="dropdown-menu" aria-labelledby="distance_dropdown">
+        <li>
+          <a class="dropdown-item" href="#" onclick="searchByDistance(5)"
+            >< 5Km</a
+          >
+        </li>
+        <li>
+          <a class="dropdown-item" href="#" onclick="searchByDistance(10)"
+            >< 10Km</a
+          >
+        </li>
+        <li>
+          <a class="dropdown-item" href="#" onclick="searchByDistance('>10')"
+            >>10Km</a
+          >
+        </li>
+        <li>
+          <a class="dropdown-item" href="#" onclick="searchByDistance(-1)"
+            >clear</a
+          >
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+<!-- Category Bar -->
