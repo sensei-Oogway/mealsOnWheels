@@ -652,6 +652,14 @@ function fetchCustomerOrderDetails(order_id, trigger) {
         }
       }
 
+    if(data.status == "delivered" && data.feedback == ""){
+        $("#orderCustomerModal .feedback-div").removeClass("d-none");
+    }else{
+        if(!$("#orderCustomerModal .feedback").hasClass("d-none")){
+            $("#orderCustomerModal .feedback-div").addClass("d-none");
+        }
+    }
+
       //Trigger
       trigger.click();
     },
@@ -701,10 +709,42 @@ function fetchRestaurantOrderDetails(order_id, trigger) {
           }
         }
 
+        //Reset previous buttons
+        if (
+            !$("#orderRestaurantModal .accept-order").hasClass("d-none")
+          ) {
+            $("#orderRestaurantModal .accept-order").addClass("d-none");
+          }
+
+          if (
+            !$("#orderRestaurantModal .reject-order").hasClass("d-none")
+          ) {
+            $("#orderRestaurantModal .reject-order").addClass("d-none");
+          }
+
+          if (
+            !$("#orderRestaurantModal .feedback-div").hasClass("d-none")
+          ) {
+            $("#orderRestaurantModal .feedback-div").addClass("d-none");
+          }
+
+          if (
+            !$("#orderRestaurantModal .delivery-div").hasClass("d-none")
+          ) {
+            $("#orderRestaurantModal .delivery-div").addClass("d-none");
+          }
+
         //Based on Status
         if(data.status == "placed"){
             $("#orderRestaurantModal .accept-order").removeClass("d-none");
             $("#orderRestaurantModal .reject-order").removeClass("d-none");
+        }else if(data.status == "courier_accepted"){
+            $("#orderRestaurantModal .update-order").html("Read to dispatch"); //ready_to_dispatch
+            $("#orderRestaurantModal .update-order").attr("status", "ready_to_dispatch");
+            $("#orderRestaurantModal .update-order").removeClass("d-none");
+        }else if(data.status == "delivered" && data.feedback.length > 0){
+            $("#orderRestaurantModal .feedback-p").html(data.feedback);
+            $("#orderRestaurantModal .feedback-div").removeClass("d-none");
         }
   
         //Trigger
@@ -740,11 +780,47 @@ function fetchRestaurantOrderDetails(order_id, trigger) {
           newLi.html(menu_obj[i].name);
           $("#orderCourierModal .order_menu").append(newLi);
         }
+
+        //Reset previous buttons
+        if (
+            !$("#orderCourierModal .accept-order").hasClass("d-none")
+          ) {
+            $("#orderCourierModal .accept-order").addClass("d-none");
+          }
+
+          if (
+            !$("#orderCourierModal .reject-order").hasClass("d-none")
+          ) {
+            $("#orderCourierModal .reject-order").addClass("d-none");
+          }
+
+          if (
+            !$("#orderCourierModal .update-order").hasClass("d-none")
+          ) {
+            $("#orderCourierModal .update-order").addClass("d-none");
+          }
+
+          if (
+            !$("#orderCourierModal .feedback-div").hasClass("d-none")
+          ) {
+            $("#orderCourierModal .feedback-div").addClass("d-none");
+          }
   
         //Based on Status
         if(data.status == "waiting_for_courier"){
             $("#orderCourierModal .accept-order").removeClass("d-none");
             $("#orderCourierModal .reject-order").removeClass("d-none");
+        }else if(data.status == "ready_to_dispatch" ){
+            $("#orderCourierModal .update-order").html("Picked Up"); 
+            $("#orderCourierModal .update-order").attr("status", "picked_up");
+            $("#orderCourierModal .update-order").removeClass("d-none");
+        }else if(data.status == "picked_up"){
+            $("#orderCourierModal .update-order").html("Delivered"); 
+            $("#orderCourierModal .update-order").attr("status", "delivered");
+            $("#orderCourierModal .update-order").removeClass("d-none");
+        }else if(data.status == "delivered" && data.feedback.length > 0){
+            $("#orderCourierModal .feedback-p").html(data.feedback)
+            $("#orderCourierModal .feedback-div").removeClass("d-none");
         }
   
         //Trigger
@@ -839,6 +915,78 @@ function fetchRestaurantOrderDetails(order_id, trigger) {
           data = response;
           location.reload();
 
+        },
+          error: function (xhr, status, error) {
+            console.error(xhr.responseText);
+          },
+        });
+  }
+
+  function updateRestaurantOrder(status){
+    var order_id = $("#orderRestaurantModal").attr("order-id");
+    var owner_id = localStorage.getItem("userId");
+
+    var status = $("#orderRestaurantModal .update-order").attr("status");
+    $.ajax({
+        url: "/restaurant/status_update",
+        type: "POST",
+        data: {
+          "order_id": order_id,
+          "status":status,
+          "user_id":owner_id
+        },
+        success: function (response) {
+          data = response;
+
+          loadRestaurantOrdersPage();
+
+        },
+          error: function (xhr, status, error) {
+            console.error(xhr.responseText);
+          },
+        });
+  }
+
+  function updateCourierOrder(status){
+    var order_id = $("#orderCourierModal").attr("order-id");
+    var email_id = localStorage.getItem("userId");
+
+    var status = $("#orderCourierModal .update-order").attr("status");
+    $.ajax({
+        url: "/restaurant/status_update",
+        type: "POST",
+        data: {
+          "order_id": order_id,
+          "status":status,
+          "user_id":email_id
+        },
+        success: function (response) {
+          data = response;
+          location.reload();
+        },
+          error: function (xhr, status, error) {
+            console.error(xhr.responseText);
+          },
+        });
+  }
+
+  function submitFeedback(){
+    var order_id = $("#orderModalLabel").attr("order-id");
+    var res_rating = $("#restaurantRating").val();
+    var courier_rating =  $("#deliveryRating").val();
+    var feedback = $("#feedbackText").val();
+
+    $.ajax({
+        url: "/restaurant/provide_feedback_to_order",
+        type: "POST",
+        data: {
+          "order_id": order_id,
+          "res_rating":res_rating,
+          "courier_rating":courier_rating,
+          "feedback":feedback
+        },
+        success: function (response) {
+            toastr.success("ThankYou! for your feedback..", "Success");
         },
           error: function (xhr, status, error) {
             console.error(xhr.responseText);

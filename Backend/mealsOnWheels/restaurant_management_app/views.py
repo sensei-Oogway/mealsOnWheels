@@ -57,8 +57,10 @@ def view_courier_homepage(request):
     email = request.POST.get("email")
     orders = fetch_orders_by_courier_email(email)
     
-    return render(request,'delivery_homePage.html', {'orders':orders})
-
+    if len(orders) == 0:
+        return render(request,'delivery_homePage.html', {'orders':orders,'noOrders': True})
+    else:
+        return render(request,'delivery_homePage.html', {'orders':orders})
 
 
 def load_restaurant_ordersPage(request):
@@ -184,19 +186,32 @@ def provide_feedback_to_order(request):
     order_id = request.POST.get('order_id')
     res_rating = request.POST.get('res_rating')
     courier_rating = request.POST.get('courier_rating')
+    
+    feedback_text = request.POST.get('feedback')
+    feedback_text = f""+feedback_text+"\n"+"Restaurant Rating: "+res_rating+"&starf;\nCourier Rating: "+courier_rating+"&starf;"
 
     try:
         order = Order.objects.get(id=order_id)
     except Order.DoesNotExist:
         return JsonResponse({'error': 'Order with the provided ID does not exist'}, status=404)
 
-    feedback = f"{res_rating}|{courier_rating}"
+    feedback = feedback_text
+    
+    order = Order.objects.get(id=order_id)
+    courier = order.delivery_requests.first()
+    restaurant = order.restaurant_instance
+    
+    res_rating = float(res_rating)
+    
+    restaurant.rating = round(((restaurant.rating + res_rating)/2),2)
+    restaurant.save()
 
-    if order.feedback:
-        order.feedback += f",{feedback}"
-    else:
-        order.feedback = feedback
+    # if order.feedback:
+    #     order.feedback += f",{feedback}"
+    # else:
+    #     
 
+    order.feedback = feedback
     order.save()
 
     return JsonResponse({'message': 'Feedback added to order successfully'}, status=200)
@@ -383,9 +398,12 @@ def status_update(request):
 
             # Remove all other delivery requests and add the specific courier
             couriers = Courier.objects.filter(orders=order)  # Filter couriers who have the order
-            for courier in couriers:
-                courier.orders.remove(order)  # Remove the order from the courier's orders
-                courier.save()
+            for courier_ in couriers:
+                courier_.orders.remove(order)  # Remove the order from the courier's orders
+                courier_.save()
+                
+            courier.orders.add(order)
+            courier.save()
             
             order.delivery_requests.clear()
             order.delivery_requests.add(courier)

@@ -32,6 +32,10 @@
       </div>
     </li>
     {% endfor %}
+
+    {%if noOrders%}
+    <h4 class="col-12 text-center">No Orders at the moment</h4>
+    {%endif%}
     <!-- order Item row -->
   </ul>
 </div>
@@ -66,8 +70,18 @@
         <div class="modal-footer">
           <button type="button" class="btn btn-success accept-order d-none" onclick="acceptCourierOrder()" data-bs-dismiss="modal">Accept</button>
           <button type="button" class="btn btn-danger reject-order d-none" onclick="rejectCourierOrder()" data-bs-dismiss="modal">Reject</button>
+        
+          <button type="button" class="btn btn-success update-order d-none" onclick="updateCourierOrder()" data-bs-dismiss="modal"></button>
         </div>
+                      <!-- feedback div -->
+       <div class="feedback-div d-none">
+        <h5 class="text-center">Feedback</h5>
+        <p class="feedback-p" style="white-space: pre;"></p>
+       </div>       
+              
+              <!-- feedback div -->
       </div>
+
     </div>
     <!-- Order Modal details -->
   </div>
