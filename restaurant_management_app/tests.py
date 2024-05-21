@@ -23,6 +23,7 @@ class RestaurantTestCase(TestCase):
         )
 
     def test_create_restaurant(self):
+        
         self.assertEqual(self.restaurant.name, "Test Restaurant")
         self.assertEqual(self.restaurant.address, "Test Address")
         self.assertEqual(self.restaurant.image, "Test Image")
