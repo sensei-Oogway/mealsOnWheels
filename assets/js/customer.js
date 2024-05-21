@@ -739,7 +739,7 @@ function fetchRestaurantOrderDetails(order_id, trigger) {
             $("#orderRestaurantModal .accept-order").removeClass("d-none");
             $("#orderRestaurantModal .reject-order").removeClass("d-none");
         }else if(data.status == "courier_accepted"){
-            $("#orderRestaurantModal .update-order").html("Read to dispatch"); //ready_to_dispatch
+            $("#orderRestaurantModal .update-order").html("Ready to dispatch"); //ready_to_dispatch
             $("#orderRestaurantModal .update-order").attr("status", "ready_to_dispatch");
             $("#orderRestaurantModal .update-order").removeClass("d-none");
         }else if(data.status == "delivered" && data.feedback.length > 0){
