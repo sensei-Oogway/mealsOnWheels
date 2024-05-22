@@ -11,7 +11,7 @@ WEBHOOK_SECRET = "This_1s_s0_hard"
 # Endpoint to receive webhook payloads
 @app.route('/api/tunnels', methods=['POST'])
 def webhook():
-    # Verify webhook signature if secret is configured
+    # Verify webhook signature if secret is configured 
     if WEBHOOK_SECRET:
         signature = request.headers.get('X-Hub-Signature')
         if not signature:
