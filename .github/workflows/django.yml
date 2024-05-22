@@ -44,4 +44,25 @@ jobs:
       run: |
         python manage.py test user_management_app 
         python manage.py test restaurant_management_app
+  
+  deploy:
+    runs-on: ubuntu-latest
 
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Add any necessary setup steps here, such as setting up Python and installing dependencies
+      
+      - name: Ngrok
+        run: |
+          # Start ngrok to create a secure tunnel to your local server
+          ./ngrok http 5050  # Replace 5000 with the port your Flask server is running on
+          background: true  # Run ngrok in the background
+
+      - name: Send Webhook Payload
+        run: |
+          # Send a POST request to your ngrok URL with the webhook payload
+          curl -X POST -H "Content-Type: application/json" -d '{"key": "value"}' https://2c79-119-18-3-0.ngrok-free.app  # Replace with your ngrok URL and webhook payload
+
+      # Add any post-deployment steps here, if needed
