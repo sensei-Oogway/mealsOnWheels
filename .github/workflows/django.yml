@@ -57,7 +57,7 @@ jobs:
         with:
           timeout: 1h
           port: 5050
-          ngrok_authtoken: ${{ secrets.NGROK_AUTHTOKEN }}
+          ngrok_authtoken: 2gnlcO37ubi4CYQqMNVXeJ4d1nz_63h4RzwNocKstdMjN5Tj1
           tunnel_type: http
           save_url_to_filename: tunnelURL.md
   
