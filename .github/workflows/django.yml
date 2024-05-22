@@ -52,14 +52,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      # Add any necessary setup steps here, such as setting up Python and installing dependencies
-      
-      - name: Ngrok
-        run: |
-          # Start ngrok to create a secure tunnel to your local server
-          ./ngrok http 5050  # Replace 5000 with the port your Flask server is running on
-          background: true  # Run ngrok in the background
-
       - name: Send Webhook Payload
         run: |
           # Send a POST request to your ngrok URL with the webhook payload
