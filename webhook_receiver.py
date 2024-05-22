@@ -31,7 +31,7 @@ def webhook():
     if payload:
         subprocess.run(['git', 'pull'], check=True)
         subprocess.run(['python', 'manage.py', 'migrate'], check=True)
-        subprocess.Popen(['nohup', 'python', 'manage.py', 'runserver', '0.0.0.0:8000'])
+        subprocess.Popen(['python', 'manage.py', 'runserver'])
         print("Received payload:", payload)
         return jsonify({"message": "Webhook received successfully"}), 200
     else:
