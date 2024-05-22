@@ -52,6 +52,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Authenticate ngrok
+        run: |
+          ngrok authtoken ${{ secrets.NGROK_AUTH_TOKEN }}
+
       - name: Send Webhook Payload
         run: |
           # Send a POST request to your ngrok URL with the webhook payload
