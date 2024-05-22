@@ -56,5 +56,3 @@ jobs:
         run: |
           # Send a POST request to your ngrok URL with the webhook payload
           curl -X POST -H "Content-Type: application/json" -d '{"key": "value"}' https://1db8-119-18-3-0.ngrok-free.app/webhook
-        env:
-          NGROK_AUTHTOKEN: 2gnlcO37ubi4CYQqMNVXeJ4d1nz_63h4RzwNocKstdMjN5Tj1
