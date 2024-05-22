@@ -49,18 +49,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      # - name: Ngrok
-      #   uses: gh-actions/ngrok-action@v1
-      #   with:
-      #     authtoken: ${{ secrets.NGROK_AUTH_TOKEN }}
-      #     port: 5050 
+    - name: Start Ngrok
+      uses: gh-actions/ngrok-action@v1
+      with:
+        authtoken: ${{ secrets.NGROK_AUTH_TOKEN }}
+        port: 5050  
       
-      - name: Send Webhook Payload
-        run: |
-          # Send a POST request to your ngrok URL with the webhook payload
-          curl -X POST -H "Content-Type: application/json" -d '{"key": "value"}'  https://b279-119-18-3-0.ngrok-free.app/webhook  # Replace with your ngrok URL and webhook payload
-
-      # Add any post-deployment steps here, if needed
+    - name: Send Webhook Payload
+      run: |
+        # Send a POST request to your ngrok URL with the webhook payload
+        curl -X POST -H "Content-Type: application/json" -d '{"key": "value"}' https://b279-119-18-3-0.ngrok-free.app /webhook  # Replace with your ngrok URL and webhook payload
