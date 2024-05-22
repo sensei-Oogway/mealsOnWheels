@@ -9,7 +9,7 @@ app = Flask(__name__)
 WEBHOOK_SECRET = "This_1s_s0_hard"
 
 # Endpoint to receive webhook payloads
-@app.route('/webhook', methods=['POST'])
+@app.route('/api/tunnels', methods=['POST'])
 def webhook():
     # Verify webhook signature if secret is configured
     if WEBHOOK_SECRET:
@@ -38,4 +38,4 @@ def webhook():
         abort(400)
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5050)
+    app.run(debug=True, port=4040)
