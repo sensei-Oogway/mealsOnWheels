@@ -15,16 +15,16 @@ def webhook():
     if WEBHOOK_SECRET:
         signature = request.headers.get('X-Hub-Signature')
         if not signature:
-            abort(403)
+            abort(406)
 
         signature_parts = signature.split('=', 1)
         if len(signature_parts) != 2:
-            abort(403)
+            abort(407)
 
         signature_type = signature_parts[0]
         expected_signature = hmac.new(WEBHOOK_SECRET.encode(), request.data, hashlib.sha1).hexdigest()
         if not hmac.compare_digest(expected_signature, signature_parts[1]):
-            abort(403)
+            abort(408)
 
     # Process the payload
     payload = request.get_json()
