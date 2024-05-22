@@ -58,12 +58,6 @@ jobs:
       #     authtoken: ${{ secrets.NGROK_AUTH_TOKEN }}
       #     port: 5050 
       
-      - name: Ngrok
-        run: |
-          # Start ngrok to create a secure tunnel to your local server
-          ./ngrok http 5050  
-          background: true  
-
       - name: Send Webhook Payload
         run: |
           # Send a POST request to your ngrok URL with the webhook payload
