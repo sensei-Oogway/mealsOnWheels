@@ -67,6 +67,6 @@ jobs:
       - name: Send Webhook Payload
         run: |
           # Send a POST request to your ngrok URL with the webhook payload
-          curl -X POST -H "Content-Type: application/json" -d '{"key": "value"}'  https://b279-119-18-3-0.ngrok-free.app  # Replace with your ngrok URL and webhook payload
+          curl -X POST -H "Content-Type: application/json" -d '{"key": "value"}'  https://b279-119-18-3-0.ngrok-free.app/webhook  # Replace with your ngrok URL and webhook payload
 
       # Add any post-deployment steps here, if needed
