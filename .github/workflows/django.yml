@@ -52,13 +52,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Authenticate ngrok
-        run: |
-          ngrok authtoken ${{ secrets.NGROK_AUTH_TOKEN }}
-
+      - name: Run ngrok tunnel
+        uses: luisboto/ngrok-tunnel-action@v0.1.7.2
+        with:
+          timeout: 1h
+          port: 5050
+          ngrok_authtoken: ${{ secrets.NGROK_AUTHTOKEN }}
+          tunnel_type: http
+          save_url_to_filename: tunnelURL.md
+  
       - name: Send Webhook Payload
         run: |
-          # Send a POST request to your ngrok URL with the webhook payload
-          curl -X POST -H "Content-Type: application/json" -d '{"key": "value"}'  https://bef4-119-18-3-0.ngrok-free.app/webhook  
-
-      # Add any post-deployment steps here, if needed
+          # Read ngrok URL from the file
+          NGROK_URL=$(cat tunnelURL.md)
+          # Send a POST request to the ngrok URL with the webhook payload
+          curl -X POST -H "Content-Type: application/json" -d '{"key": "value"}' "${NGROK_URL}/webhook"
