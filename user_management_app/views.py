@@ -23,7 +23,7 @@ def register_user(request):
     password = data.get('password')
     user_type = data.get('user_type')  # user_type (e.g., 'customer', 'owner', 'courier')
     
-    # print(request.POST)
+    # print(request.POST) 
 
     if not (email and password and user_type):
         return JsonResponse({'error': 'Incomplete registration data'}, status=400)
