@@ -207,7 +207,7 @@ async function submitRegistrationForm(element) {
       console.error("Error:", error);
     });
 }
-
+ 
 function validateForm(formData) {
   var isValid = true;
 
