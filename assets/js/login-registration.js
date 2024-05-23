@@ -200,6 +200,7 @@ async function submitRegistrationForm(element) {
         document.body.appendChild(overlay);
 
         setTimeout(() => Window.location="/index", 3000);
+        location.reload();
       }
     })
     .catch((error) => {

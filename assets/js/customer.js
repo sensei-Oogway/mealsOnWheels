@@ -442,7 +442,7 @@ function addToCart(restaurant_id, menu_id, menu_name, menu_price, menu_img) {
   var gross_ttl = current_price + current_gross_ttl;
   var service_tax = (gross_ttl * 0.05).toFixed(2);
   service_tax = parseFloat(service_tax);
-  var discount = localStorage.getItem("subscription") == "none" ? 0 : 0.1;
+  var discount = localStorage.getItem("subscription") == "no_subscription" ? 0 : 0.1;
 
   var net_ttl = (
     gross_ttl +
