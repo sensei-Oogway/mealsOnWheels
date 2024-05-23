@@ -11,6 +11,7 @@ from django.contrib.auth.hashers import check_password
 import random
 import json
 
+
 def home_login(request):
     return render(request,"login_registration.html")
 
