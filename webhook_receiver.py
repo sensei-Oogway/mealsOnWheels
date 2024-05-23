@@ -12,7 +12,7 @@ WEBHOOK_SECRET = "This_1s_s0_hard"
 @app.route('/webhook', methods=['POST'])
 def webhook():
     python_interpreter = 'C:/Users/DrAks/PycharmProjects/pythonProject/venv/Scripts/python'
-    # Process the payload
+    # Process the payload 
     payload = request.get_json()
     if payload:
         subprocess.run(['git', 'pull'], check=True)
