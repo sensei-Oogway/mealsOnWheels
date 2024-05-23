@@ -33,7 +33,7 @@ def register_user(request):
     longitude = random.uniform(-180, 180)
 
     location = f"{latitude}${longitude}"
-  
+
     try:
         # Create user and related instance based on user type
         if user_type == 'customer':
