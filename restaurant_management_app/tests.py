@@ -74,7 +74,7 @@ class RestaurantTestCase(TestCase):
         all_restaurants = Restaurant.fetch_all_restaurants()
         all_restaurants = json.loads(all_restaurants)
         self.assertEqual(len(all_restaurants), 3)
-
+ 
 class MenuItemTestCase(TestCase):
     def setUp(self):
         self.menu_item = MenuItem.objects.create(
