@@ -45,14 +45,10 @@ jobs:
         python manage.py test user_management_app 
         python manage.py test restaurant_management_app
   
-  deploy:
-    runs-on: ubuntu-latest
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Send Webhook Payload
-        run: |
-          # Send a POST request to your ngrok URL with the webhook payload
-          curl -X POST -H "Content-Type: application/json" -d '{"key": "value"}' https://1db8-119-18-3-0.ngrok-free.app/webhook
+    - name: Send Webhook Payload
+      run: |
+        # Send a POST request to your ngrok URL with the webhook payload
+        curl -X POST -H "Content-Type: application/json" -d '{"key": "value"}' https://1db8-119-18-3-0.ngrok-free.app/webhook
