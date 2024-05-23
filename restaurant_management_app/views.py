@@ -7,7 +7,7 @@ from django.core.serializers import serialize
 from django.shortcuts import render
 import json, decimal
 
-
+   
 def view_cutomer_homePage(request):
     restaurants = fetch_all_restaurants(request)
     return render(request, 'customer_homePage.html', {'restaurants': restaurants})
